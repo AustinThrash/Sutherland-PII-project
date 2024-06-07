@@ -1,7 +1,7 @@
 ---
-title: "Example Manuscript Template for a Data Analysis Project"
+title: "AAA games are out of touch with what the people want in video games"
 subtitle: ""
-author: Andreas Handel
+author: Aiden Sutherland
 date: "`r Sys.Date()`"
 format:
   docx:
@@ -24,8 +24,12 @@ library(here)
 library(knitr)
 ```
 
+# SUBMISSION 1
+In the past couple of years, the gaming market has been thrown for a loop with AAA titles (like Call of Duty) from these multi billion dollar game studios have absolutely flopped in comparison to some of these smaller and simpler games, a good example of one such that most people are aware of is Among Us, which got so popular that it made a small cringe cameo in the second 'Knives Out' movie. An example of a flop from a game studio that almost killed the whole studio was the famous launch of Cyberpunk 2077. 
 
+Although I am finding trouble with finding data, my hope is to get the most popular AAA games and the most popular Indie games from the past 5 years(A total of 10 games) and do an analysis on how well these games performed in the market. This data can hopefully be acquired from launcher stats (like steam or epic games) and news polls on twitter or other social media websites (like Reddit).
 
+hypothesis/question I want answered: Have AAA game studios lost their touch when it comes to providing the market with a quality product as compared to indie game studios?
 # Summary/Abstract
 _Write a summary of your project._
 
@@ -38,11 +42,20 @@ _Write a summary of your project._
 ## General Background Information
 _Provide enough background on your topic that others can understand the why and how of your analysis_ 
 
+
+
 ## Description of data and data source
 _Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
-
+Although I am finding trouble with finding data, my hope is to get the most popular AAA games and the most popular Indie games from the past 5 years(A total of 10 games) and do an analysis on how well these games performed in the market. This data can hopefully be acquired from launcher stats (like steam or epic games) and news polls on twitter or other social media websites (like Reddit).
 ## Questions/Hypotheses to be addressed
 _State the research questions you plan to answer with this analysis._
+Have AAA game studios lost their touch when it comes to providing the market with a quality product as compared to indie game studios?
+
+
+
+
+
+
 
 To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the bibtex file specified in the YAML header above and have the right bibtex key. Then you can include like this:
 
@@ -56,7 +69,7 @@ Examples of reproducible research projects can for instance be found in [@mckay2
 # Methods 
 
 _Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement._
-
+In order to sort my data and find the top 5 for each studio type in the past 5 years, I am going to research multiple credible gaming news channels and look for their polls on the people's most popular game. This can be done by looking up surveys that game launching sites have given their users (like the Game of The year Awards). After I get the number of titles I need I will view how many current downloads the game has accrued for each title, how much money/profit the game made for the studio, current players to this day, and overall sentiment for the game.
 
 ## Schematic of workflow
 
