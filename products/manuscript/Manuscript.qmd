@@ -46,7 +46,7 @@ _Provide enough background on your topic that others can understand the why and 
 
 ## Description of data and data source
 _Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
-Although I am finding trouble with finding data, my hope is to get the most popular AAA games and the most popular Indie games from the past 5 years(A total of 10 games) and do an analysis on how well these games performed in the market. This data can hopefully be acquired from launcher stats (like steam or epic games) and news polls on twitter or other social media websites (like Reddit).
+
 ## Questions/Hypotheses to be addressed
 _State the research questions you plan to answer with this analysis._
 Have AAA game studios lost their touch when it comes to providing the market with a quality product as compared to indie game studios?
