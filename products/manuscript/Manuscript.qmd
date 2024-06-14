@@ -69,7 +69,8 @@ Examples of reproducible research projects can for instance be found in [@mckay2
 # Methods 
 
 _Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement._
-In order to sort my data and find the top 5 for each studio type in the past 5 years, I am going to research multiple credible gaming news channels and look for their polls on the people's most popular game. This can be done by looking up surveys that game launching sites have given their users (like the Game of The year Awards). After I get the number of titles I need I will view how many current downloads the game has accrued for each title, how much money/profit the game made for the studio, current players to this day, and overall sentiment for the game.
+I found 2 different datasets that contained diffferent kinds of sentiment about certain video game titles, 1 by metascore, and one by userscore,
+
 
 ## Schematic of workflow
 
@@ -91,7 +92,10 @@ _As applicable, explain where and how you got the data. If you directly import t
 
 
 ## Data import and cleaning
-_Write code that reads in the file and cleans it so it's ready for analysis. Since this will be fairly long code for most datasets, it might be a good idea to have it in one or several R scripts. If that is the case, explain here briefly what kind of cleaning/processing you do, and provide more details and well documented code somewhere (e.g. as supplement in a paper). All materials, including files that contain code, should be commented well so everyone can follow along._
+In the Data folder of this repository, there are 2 data sets that are the ground work for the whole project. One I imported from a different GitHub repo 
+that can be found in the sources folder (I also downloaded it just in case) and the other is from Kaggle, which I downloaded directly from the site and 
+imported it manually. The cleaning process involved me joining the 2 data sets, making sure there were no duplicates of any kind in any variable (the 
+publisher column required me to change anything that contained Warner Brothers to just Warner Brothers). From then I broke down the final joined dataset to the top 25 publishers and games based on user score and units sold.
 
 
 ## Statistical analysis

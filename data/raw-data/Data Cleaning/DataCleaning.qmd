@@ -1,0 +1,80 @@
+---
+title: "Data Cleaning"
+author: "Aiden Sutherland"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse) 
+library(lubridate) 
+library(ggpubr)    
+library(patchwork) 
+library(hrbrthemes)
+library(ggalt)     
+library(extrafont) 
+```
+
+Loading in datasets for the project, This data is from 2019, as I could not find other datasets that were available with this much detail from a more recent year.
+
+```{r}
+VideoGames <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-07-30/video_games.csv") %>%
+  mutate(release_date = as.Date(release_date, "%b %d, %Y")) %>%
+  distinct(game, developer, publisher, .keep_all = TRUE)
+
+MetacriticGames <- read_csv("~/GitHub/Sutherland-PII-project/data/raw-data/result.csv",trim_ws = TRUE)
+names(MetacriticGames)[names(MetacriticGames) == "name"] <- "game"
+
+
+```
+
+Here is where I join the 2 datasets by the game column, as we do not need the number column since theyll already be numbered. Since there were many different names for Warner Brothers, the source from what I attained the dataset advised to change all of them to just "Warner Bros". Also deleted duplicate submissions.
+
+```{r}
+games <- MetacriticGames %>%
+  filter(console=="PC") %>% 
+  inner_join(VideoGames,by = 'game') %>%
+  mutate(owners=parse_number(owners,trim_ws = TRUE)) %>%
+  mutate(publisher = case_when(str_detect(publisher,pattern = "Warner Bros|WB")~"Warner Brothers",TRUE~publisher)) %>% 
+  select(-c(release_date,developer,number,metascore.y))
+```
+
+Here I filter out all of the games and publishers to only get the top 25 publishers for the year.
+```{r}
+top_25_publishers <- games %>% 
+  group_by(publisher) %>% 
+  summarise(Owners=sum(owners)) %>% 
+  top_n(25)
+#Filtering games based on top 25 publishers
+top_25_filtered <- games %>% 
+  semi_join(top_25_publishers)
+```
+Here I make a datset containing only the top 25 games of the year by user score, which is what I am really trying to measure in this project. I filtered out userscores that were left 'tbd'.
+```{r}
+games <- games %>% filter(userscore != "tbd")
+top_25_userscore <- games %>% 
+  arrange(desc(as.numeric(userscore))) %>% 
+  slice(1:25)
+```
+
+
+
+This next part of the data is a little more time intensive, given since there is no dataset thats present listing if a game is AAA or not
+I am required to go 1 by 1 of the top 25 games in terms of user score, then by owners and look if the game is a AAA title or not.BY doing that I will then get all of the titles from both datasets, then put either AAA, AA, or Indie in a third column, then append it to the games dataset.
+
+
+
+
+
+
+
+
+

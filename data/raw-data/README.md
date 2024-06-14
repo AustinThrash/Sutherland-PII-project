@@ -1,14 +1,9 @@
 #raw-data
 
-This folder should contain all raw data. As needed add sub-folders.
+This folder should contain all raw data. 
 
-Currently, as an example, it contains a simple made-up data-set in an Excel file.
+The data in this folder should contain uncleaned csv files conatining information on the game, publisher, userscore, and other variables needed in the analyzing of user sentiment for AAA titles.
 
-The dataset contains the variables `Height`, `Weight` and `Gender` of a few imaginary individuals.
+There is also another folder related to the cleaning of data and the breakdown of variables
 
-The dataset purposefully contains some faulty entries that need to be cleaned.
-
-Generally, any dataset should contain some meta-data explaining what each variable in the dataset is. (This is often called a **Codebook**.) For this simple example, the codebook is given as a second sheet in the Excel file.
-
-This raw data-set should generally not be edited by hand. It should instead be loaded and processed/cleaned using code.
-
+PSA [as of 6/14/2024] I am still researching all of the titles that are considered AAA and am compiling my findings in an xml file that will be added as soon as possible.
