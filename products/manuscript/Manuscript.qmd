@@ -29,7 +29,7 @@ In the past couple of years, the gaming market has been thrown for a loop with A
 
 Although I am finding trouble with finding data, my hope is to get the most popular AAA games and the most popular Indie games from the past 5 years(A total of 10 games) and do an analysis on how well these games performed in the market. This data can hopefully be acquired from launcher stats (like steam or epic games) and news polls on twitter or other social media websites (like Reddit).
 
-hypothesis/question I want answered: Have AAA game studios lost their touch when it comes to providing the market with a quality product as compared to indie game studios?
+hypothesis/question I want answered: What effects a game's user score?
 # Summary/Abstract
 _Write a summary of your project._
 
@@ -41,15 +41,16 @@ _Write a summary of your project._
 
 ## General Background Information
 _Provide enough background on your topic that others can understand the why and how of your analysis_ 
-
+I have long asked myself what makes a good video game, and if certain video games are worth the prices they are being sold for. There have been many instances where I spent a 60 dollars on a heaping pile of garbage, and then spent 10 dollars on some of the best fun I have had at a computer screen. Is a game defined by the amount of replay-ability it has or the cost:quality ratio? I wanted to find out what made people decide what made a game "good".
 
 
 ## Description of data and data source
 _Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
+The data I have collected is from a data source from an interesting project 
 
 ## Questions/Hypotheses to be addressed
 _State the research questions you plan to answer with this analysis._
-Have AAA game studios lost their touch when it comes to providing the market with a quality product as compared to indie game studios?
+What effects a game's user score?
 
 
 
@@ -69,7 +70,7 @@ Examples of reproducible research projects can for instance be found in [@mckay2
 # Methods 
 
 _Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement._
-I found 2 different datasets that contained diffferent kinds of sentiment about certain video game titles, 1 by metascore, and one by userscore,
+I found 2 different data sets that contained different kinds of sentiment about certain video game titles, 1 by metascore, and one by userscore. I then combined them, found the top 25 games for userscore, amount of owners, median playtime, and average playtime then put them in the final dataset. Overall there were 56 obs with 13 variables.
 
 
 ## Schematic of workflow

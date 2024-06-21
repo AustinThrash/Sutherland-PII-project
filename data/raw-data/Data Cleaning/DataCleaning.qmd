@@ -5,14 +5,6 @@ format: html
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
 library(tidyverse) 
 library(lubridate) 
@@ -21,9 +13,12 @@ library(patchwork)
 library(hrbrthemes)
 library(ggalt)     
 library(extrafont) 
+library(readr)
+library(dplyr)
+
 ```
 
-Loading in datasets for the project, This data is from 2019, as I could not find other datasets that were available with this much detail from a more recent year.
+Loading in data sets for the project, This data is from 2019, as I could not find other data sets that were available with this much detail from a more recent year.
 
 ```{r}
 VideoGames <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-07-30/video_games.csv") %>%
@@ -32,22 +27,28 @@ VideoGames <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytu
 
 MetacriticGames <- read_csv("~/GitHub/Sutherland-PII-project/data/raw-data/result.csv",trim_ws = TRUE)
 names(MetacriticGames)[names(MetacriticGames) == "name"] <- "game"
-
+class_game <- read_csv("~/GitHub/Sutherland-PII-project/data/raw-data/class_game.csv")
 
 ```
 
-Here is where I join the 2 datasets by the game column, as we do not need the number column since theyll already be numbered. Since there were many different names for Warner Brothers, the source from what I attained the dataset advised to change all of them to just "Warner Bros". Also deleted duplicate submissions.
+Here is where I join the 2 data sets by the game column, as we do not need the number column since they'll already be numbered. Since there were many different names for Warner Brothers, the source from what I attained the data set advised to change all of them to just "Warner Bros". Also deleted duplicate submissions.
 
 ```{r}
-games <- MetacriticGames %>%
+ games <- MetacriticGames %>%
   filter(console=="PC") %>% 
-  inner_join(VideoGames,by = 'game') %>%
+  inner_join(VideoGames,by = "game") %>%
   mutate(owners=parse_number(owners,trim_ws = TRUE)) %>%
-  mutate(publisher = case_when(str_detect(publisher,pattern = "Warner Bros|WB")~"Warner Brothers",TRUE~publisher)) %>% 
-  select(-c(release_date,developer,number,metascore.y))
+  mutate(publisher = case_when(str_detect(publisher,pattern = "Warner Bros|WB")~"Warner Brothers",TRUE~publisher)) %>%
+  dplyr::select(-c(number,metascore.y))
+games <- games %>%
+  inner_join(class_game, by = 'game')
+games$class <- factor(games$class, levels = c("AAA", "indie"))
+games$userscore <- as.numeric(as.character(games$userscore))
+games$developer <- as.factor(games$developer)
 ```
 
 Here I filter out all of the games and publishers to only get the top 25 publishers for the year.
+
 ```{r}
 top_25_publishers <- games %>% 
   group_by(publisher) %>% 
@@ -57,7 +58,9 @@ top_25_publishers <- games %>%
 top_25_filtered <- games %>% 
   semi_join(top_25_publishers)
 ```
-Here I make a datset containing only the top 25 games of the year by user score, which is what I am really trying to measure in this project. I filtered out userscores that were left 'tbd'.
+
+Here I make a data set containing only the top 25 games of the year by user score, which is what I am really trying to measure in this project. I filtered out user scores that were left 'tbd'.
+
 ```{r}
 games <- games %>% filter(userscore != "tbd")
 top_25_userscore <- games %>% 
@@ -65,16 +68,38 @@ top_25_userscore <- games %>%
   slice(1:25)
 ```
 
+Here is another object with the top 25 average playtime per player since its release to 2019.
 
+```{r}
+top_25_average_play <- games %>% 
+  arrange(desc(as.numeric(average_playtime))) %>% 
+  slice(1:25)
+```
 
-This next part of the data is a little more time intensive, given since there is no dataset thats present listing if a game is AAA or not
-I am required to go 1 by 1 of the top 25 games in terms of user score, then by owners and look if the game is a AAA title or not.BY doing that I will then get all of the titles from both datasets, then put either AAA, AA, or Indie in a third column, then append it to the games dataset.
+Again by median playtime
 
+```{r}
+top_25_med_play <- games %>% 
+  arrange(desc(as.numeric(median_playtime))) %>% 
+  slice(1:25)
+```
 
+And again by owners
 
+```{r}
+top_25_owners <- games %>% 
+  arrange(desc(as.numeric(owners))) %>% 
+  slice(1:25)
+```
 
+For the top 25 of each of the different variables, there are only 56 different games I will be working with for this project, If the analysis is not enough I will return and up it to 50.
 
+To find the class for each game I used this link and searched each title: https://www.moddb.com/search
 
-
-
-
+```{r}
+save(top_25_average_play, file = 'cleaned_data1.RData')
+save(top_25_med_play, file = 'cleaned_data2.RData')
+save(top_25_userscore, file = 'cleaned_data3.RData')
+save(top_25_owners, file = 'cleaned_data4.RData')
+save(games, file = 'cleaned_games.RData')
+```
