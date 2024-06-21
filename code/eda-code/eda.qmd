@@ -3,11 +3,6 @@ title: "EDA"
 date: "6-20-2024"
 output: html_document
 ---
-
-  
-  
-
-
 # Setup
 
 ```{r}
@@ -42,37 +37,54 @@ Here are some visualizations for each predictor variable for userscore
 
 ```{r}
 # Boxplot of user scores by game classification
-ggplot(games, aes(x = class, y = userscore)) +
+p1 <- ggplot(games, aes(x = class, y = userscore)) +
   geom_boxplot() +
   labs(title = "User Scores by Game Classification", x = "Game Classification", y = "User Score")
+figure_file = here("results","figures","Class-user-box.png")
+ggsave(filename = figure_file, plot = p1)
 
 # Scatter plots of user scores vs. other numerical variables, colored by game classification
-ggplot(games, aes(x = average_playtime, y = userscore, color = class)) +
+p2 <- ggplot(games, aes(x = average_playtime, y = userscore, color = class)) +
   geom_point() +
   geom_smooth(method = "lm") +
   labs(title = "User Scores vs. Average Playtime by Game Classification", x = "Average Playtime", y = "User Score")
+figure_file2 = here("results","figures","average-user-scatter.png")
+ggsave(filename = figure_file2, plot = p2)
 
-ggplot(games, aes(x = metascore.x, y = userscore, color = class)) +
+p3 <- ggplot(games, aes(x = metascore.x, y = userscore, color = class)) +
   geom_point() +
   geom_smooth(method = "lm") +
   labs(title = "User Scores vs. Metascore by Game Classification", x = "Metascore", y = "User Score")
+figure_file3 = here("results","figures","meta-user-scatter.png")
+ggsave(filename = figure_file3, plot = p3)
 
-ggplot(games, aes(x = price, y = userscore, color = class)) +
+p4 <- ggplot(games, aes(x = price, y = userscore, color = class)) +
   geom_point() +
   geom_smooth(method = "lm") +
   labs(title = "User Scores vs. Price by Game Classification", x = "Price", y = "User Score")
+figure_file4 = here("results","figures","price-user-scatter.png")
+ggsave(filename = figure_file4, plot = p4)
 
-ggplot(games, aes(x = owners, y = userscore, color = class)) +
+
+p5 <- ggplot(games, aes(x = owners, y = userscore, color = class)) +
   geom_point() +
   geom_smooth(method = "lm") +
   labs(title = "User Scores vs. Owners by Game Classification", x = "Owners", y = "User Score")
+figure_file5 = here("results","figures","owners-user-scatter.png")
+ggsave(filename = figure_file5, plot = p5)
 
-ggplot(games, aes(x = median_playtime, y = userscore, color = class)) +
+p6 <- ggplot(games, aes(x = median_playtime, y = userscore, color = class)) +
   geom_point() +
   geom_smooth(method = "lm") +
   labs(title = "User Scores vs. Median Playtime by Game Classification", x = "Median Playtime", y = "User Score")
-
-
+figure_file6 = here("results","figures","median-user-scatter.png")
+ggsave(filename = figure_file6, plot = p6)
+p1
+p2
+p3
+p4
+p5
+p6
 ```
 
 
@@ -83,6 +95,7 @@ glm_model <- glm(userscore ~ class + average_playtime + metascore.x + price + ow
                  data = games, 
                  family = gaussian())
 summary(glm_model)
+save(glm_model, file = 'first_model.RData')
 ```
 There seem to be a few predictors that are statistically significant:
 metascore.x
@@ -97,9 +110,10 @@ developerTripwire Interactive
 
 Below we check the model for non-linearity, homoscedasticity, normally distributed residuals, and identify if there are any influential data points.
 ```{r}
-par(mfrow = c(2, 2))
+diagnostics<- par(mfrow = c(2, 2))
 plot(glm_model)
 par(mfrow = c(1, 1))
+diagnostics
 ```
 
 

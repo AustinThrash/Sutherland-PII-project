@@ -10,13 +10,19 @@ format:
     highlight-style: github
 bibliography: ../../assets/dataanalysis-references.bib
 csl: ../../assets/apa.csl
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
-The structure below is one possible setup for a data analysis project (including the course project). For a manuscript, adjust as needed. 
+The structure below is one possible setup for a data analysis project (including the course project).
+For a manuscript, adjust as needed.
 You don't need to have exactly these sections, but the content covering those sections should be addressed.
 
-This uses MS Word as output format. [See here](https://quarto.org/docs/output-formats/ms-word.html) for more information. You can switch to other formats, like html or pdf. See [the Quarto documentation](https://quarto.org/) for other formats.
-
+This uses MS Word as output format.
+[See here](https://quarto.org/docs/output-formats/ms-word.html) for more information.
+You can switch to other formats, like html or pdf.
+See [the Quarto documentation](https://quarto.org/) for other formats.
 
 ```{r, echo=FALSE, message=FALSE}
 # load a few R packages
@@ -25,57 +31,52 @@ library(knitr)
 ```
 
 # SUBMISSION 1
-In the past couple of years, the gaming market has been thrown for a loop with AAA titles (like Call of Duty) from these multi billion dollar game studios have absolutely flopped in comparison to some of these smaller and simpler games, a good example of one such that most people are aware of is Among Us, which got so popular that it made a small cringe cameo in the second 'Knives Out' movie. An example of a flop from a game studio that almost killed the whole studio was the famous launch of Cyberpunk 2077. 
 
-Although I am finding trouble with finding data, my hope is to get the most popular AAA games and the most popular Indie games from the past 5 years(A total of 10 games) and do an analysis on how well these games performed in the market. This data can hopefully be acquired from launcher stats (like steam or epic games) and news polls on twitter or other social media websites (like Reddit).
+In the past couple of years, the gaming market has been thrown for a loop with AAA titles (like Call of Duty) from these multi billion dollar game studios have absolutely flopped in comparison to some of these smaller and simpler games, a good example of one such that most people are aware of is Among Us, which got so popular that it made a small cringe cameo in the second 'Knives Out' movie.
+An example of a flop from a game studio that almost killed the whole studio was the famous launch of Cyberpunk 2077.
+
+Although I am finding trouble with finding data, my hope is to get the most popular AAA games and the most popular Indie games from the past 5 years(A total of 10 games) and do an analysis on how well these games performed in the market.
+This data can hopefully be acquired from launcher stats (like steam or epic games) and news polls on twitter or other social media websites (like Reddit).
 
 hypothesis/question I want answered: What effects a game's user score?
-# Summary/Abstract
-_Write a summary of your project._
-
+# Summary/Abstract *Write a summary of your project.*
 
 {{< pagebreak >}}
 
-
-# Introduction 
+# Introduction
 
 ## General Background Information
-_Provide enough background on your topic that others can understand the why and how of your analysis_ 
-I have long asked myself what makes a good video game, and if certain video games are worth the prices they are being sold for. There have been many instances where I spent a 60 dollars on a heaping pile of garbage, and then spent 10 dollars on some of the best fun I have had at a computer screen. Is a game defined by the amount of replay-ability it has or the cost:quality ratio? I wanted to find out what made people decide what made a game "good".
 
+*Provide enough background on your topic that others can understand the why and how of your analysis* I have long asked myself what makes a good video game, and if certain video games are worth the prices they are being sold for.
+There have been many instances where I spent a 60 dollars on a heaping pile of garbage, and then spent 10 dollars on some of the best fun I have had at a computer screen.
+Is a game defined by the amount of replay-ability it has or the cost:quality ratio?
+I wanted to find out what made people decide what made a game "good".
 
 ## Description of data and data source
-_Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
-The data I have collected is from a data source from an interesting project 
+
+*Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section.* The data I have collected is from a data source from an interesting project
 
 ## Questions/Hypotheses to be addressed
-_State the research questions you plan to answer with this analysis._
-What effects a game's user score?
 
+*State the research questions you plan to answer with this analysis.* What effects a game's user score?
 
-
-
-
-
-
-To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the bibtex file specified in the YAML header above and have the right bibtex key. Then you can include like this:
+To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the bibtex file specified in the YAML header above and have the right bibtex key.
+Then you can include like this:
 
 Examples of reproducible research projects can for instance be found in [@mckay2020; @mckay2020a].
 
-
-
 {{< pagebreak >}}
 
+# Methods
 
-# Methods 
-
-_Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement._
-I found 2 different data sets that contained different kinds of sentiment about certain video game titles, 1 by metascore, and one by userscore. I then combined them, found the top 25 games for userscore, amount of owners, median playtime, and average playtime then put them in the final dataset. Overall there were 56 obs with 13 variables.
-
+*Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement.* I found 2 different data sets that contained different kinds of sentiment about certain video game titles, 1 by metascore, and one by userscore.
+I then combined them, found the top 25 games for userscore, amount of owners, median playtime, and average playtime then put them in the final dataset.
+Overall there were 56 obs with 13 variables.
 
 ## Schematic of workflow
 
-Sometimes you might want to show a schematic diagram/figure that was not created with code (if you can do it with code, do it). @fig-schematic is an example of some - completely random/unrelated - schematic that was generated with Biorender.
+Sometimes you might want to show a schematic diagram/figure that was not created with code (if you can do it with code, do it).
+@fig-schematic is an example of some - completely random/unrelated - schematic that was generated with Biorender.
 We store those figures in the `assets` folder.
 
 ```{r}
@@ -85,37 +86,65 @@ We store those figures in the `assets` folder.
 knitr::include_graphics(here("assets","antigen-recognition.png"))
 ```
 
-
-
-
 ## Data aquisition
-_As applicable, explain where and how you got the data. If you directly import the data from an online source, you can combine this section with the next._
 
+*As applicable, explain where and how you got the data. If you directly import the data from an online source, you can combine this section with the next.*
 
 ## Data import and cleaning
-In the Data folder of this repository, there are 2 data sets that are the ground work for the whole project. One I imported from a different GitHub repo 
-that can be found in the sources folder (I also downloaded it just in case) and the other is from Kaggle, which I downloaded directly from the site and 
-imported it manually. The cleaning process involved me joining the 2 data sets, making sure there were no duplicates of any kind in any variable (the 
-publisher column required me to change anything that contained Warner Brothers to just Warner Brothers). From then I broke down the final joined dataset to the top 25 publishers and games based on user score and units sold.
 
+In the Data folder of this repository, there are 2 data sets that are the ground work for the whole project.
+One I imported from a different GitHub repo that can be found in the sources folder (I also downloaded it just in case) and the other is from Kaggle, which I downloaded directly from the site and imported it manually.
+The cleaning process involved me joining the 2 data sets, making sure there were no duplicates of any kind in any variable (the publisher column required me to change anything that contained Warner Brothers to just Warner Brothers).
+From then I broke down the final joined data set to the top 25 publishers and games based on user score and units sold.
 
 ## Statistical analysis
-_Explain anything related to your statistical analyses._
 
+*Explain anything related to your statistical analyses.*
 
 {{< pagebreak >}}
-
 
 # Results
 
 ## Exploratory/Descriptive analysis
 
-_Use a combination of text/tables/figures to explore and describe your data. Show the most important descriptive results here. Additional ones should go in the supplement. Even more can be in the R and Quarto files that are part of your project._
+*Use a combination of text/tables/figures to explore and describe your data. Show the most important descriptive results here. Additional ones should go in the supplement. Even more can be in the R and Quarto files that are part of your project.* 
 
+@fig-result shows a boxplot figure produced by one of the R scripts.
+
+```{r}
+#| label: fig-result
+#| fig-cap: "USerscore by game development class."
+#| echo: FALSE
+knitr::include_graphics(here("results","figures","Class-user-box.png"))
+```
+
+@fig-result2 shows a scatter plot figure produced by one of the R scripts.
+
+```{r}
+#| label: fig-result2
+#| fig-cap: "Height and weight stratified by gender."
+#| echo: FALSE
+knitr::include_graphics(here("results","figures","average-user-scatter.png"))
+```
+
+Here is one more given that I have 6 and you get the idea, the final manuscript will have them all however I am running short on time atm.
+
+@fig-result3 shows a scatterplot figure produced by one of the R scripts.
+```{r}
+#| label: fig-result3
+#| fig-cap: "Height and weight stratified by gender."
+#| echo: FALSE
+knitr::include_graphics(here("results","figures","meta-user-scatter.png"))
+```
 
 @tbl-summarytable shows a summary of the data.
 
-Note the loading of the data providing a **relative** path using the `../../` notation. (Two dots means a folder up). You never want to specify an **absolute** path like `C:\ahandel\myproject\results\` because if you share this with someone, it won't work for them since they don't have that path. You can also use the `here` R package to create paths. See examples of that below. I generally recommend the `here` package.
+Note the loading of the data providing a **relative** path using the `../../` notation.
+(Two dots means a folder up).
+You never want to specify an **absolute** path like `C:\ahandel\myproject\results\` because if you share this with someone, it won't work for them since they don't have that path.
+You can also use the `here` R package to create paths.
+See examples of that below.
+I generally recommend the `here` package.
 
 ```{r}
 #| label: tbl-summarytable
@@ -125,26 +154,26 @@ resulttable=readRDS("../../results/tables/summarytable.rds")
 knitr::kable(resulttable)
 ```
 
-
-
 ## Basic statistical analysis
 
-_To get some further insight into your data, if reasonable you could compute simple statistics (e.g. simple models with 1 predictor) to look for associations between your outcome(s) and each individual predictor variable. Though note that unless you pre-specified the outcome and main exposure, any "p<0.05 means statistical significance" interpretation is not valid._
-
-
-@fig-result shows a scatterplot figure produced by one of the R scripts.
-
+*To get some further insight into your data, if reasonable you could compute simple statistics (e.g. simple models with 1 predictor) to look for associations between your outcome(s) and each individual predictor variable. Though note that unless you pre-specified the outcome and main exposure, any "p\<0.05 means statistical significance" interpretation is not valid.*
 ```{r}
-#| label: fig-result
-#| fig-cap: "Height and weight stratified by gender."
-#| echo: FALSE
-knitr::include_graphics(here("results","figures","height-weight-stratified.png"))
+load("~/GitHub/Sutherland-PII-project/code/eda-code/first_model.RData")
+summary(glm_model)
 ```
+There seem to be a few predictors that are statistically significant:
+metascore.x
+developerBohemia Interactive
+developer Entertainment
+developerHaemimont Games
+developerSEGA 
+developerTripwire Interactive
+
 
 
 ## Full analysis
 
-_Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here._
+*Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here.*
 
 Example @tbl-resulttable2 shows a summary of a linear model fit.
 
@@ -156,33 +185,33 @@ resulttable2 = readRDS(here("results","tables","resulttable2.rds"))
 knitr::kable(resulttable2)
 ```
 
-
 {{< pagebreak >}}
-
 
 # Discussion
 
 ## Summary and Interpretation
-_Summarize what you did, what you found and what it means._
+
+*Summarize what you did, what you found and what it means.*
 
 ## Strengths and Limitations
-_Discuss what you perceive as strengths and limitations of your analysis._
+
+*Discuss what you perceive as strengths and limitations of your analysis.*
 
 ## Conclusions
-_What are the main take-home messages?_
 
-_Include citations in your Rmd file using bibtex, the list of references will automatically be placed at the end_
+*What are the main take-home messages?*
 
-This paper [@leek2015] discusses types of analyses. 
+*Include citations in your Rmd file using bibtex, the list of references will automatically be placed at the end*
 
-These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template. 
+This paper [@leek2015] discusses types of analyses.
 
-Note that this cited reference will show up at the end of the document, the reference formatting is determined by the CSL file specified in the YAML header. Many more style files for almost any journal [are available](https://www.zotero.org/styles). You also specify the location of your bibtex reference file in the YAML. You can call your reference file anything you like.
+These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template.
 
+Note that this cited reference will show up at the end of the document, the reference formatting is determined by the CSL file specified in the YAML header.
+Many more style files for almost any journal [are available](https://www.zotero.org/styles).
+You also specify the location of your bibtex reference file in the YAML.
+You can call your reference file anything you like.
 
 {{< pagebreak >}}
 
 # References
-
-
-
