@@ -175,6 +175,38 @@ developerTripwire Interactive
 
 *Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here.*
 
+Linear Regression Model:
+RMSE (0.5475759): Indicates the average deviation of the predicted user scores from the actual user scores is about 0.548.
+MAE (0.4164835): Indicates the average absolute error of the predicted user scores is about 0.416.
+
+
+Random Forest Model:
+The RMSE and MAE values from the Random Forest model (0.420 and 0.306, respectively) are slightly lower than those from the linear regression model (0.548 and 0.416, respectively). This indicates that the Random Forest model is providing slightly better predictions in this case.
+
+RF Cross validation results:
+Random Forest 
+
+36 samples
+11 predictors
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 32, 32, 32, 33, 32, 33, ... 
+Resampling results across tuning parameters:
+
+  mtry  RMSE       Rsquared   MAE      
+    2   0.7692740  0.4999631  0.6791293
+   99   0.5960730  0.7122966  0.4878380
+  196   0.6296674  0.6880695  0.5207912
+
+RMSE was used to select the optimal model using the smallest value.
+The final value used for the model was mtry = 99.
+[1] "RMSE (Cross-validated):  0.412694747961779"
+[1] "MAE (Cross-validated):  0.302266190476191"
+
+
+
+
 Example @tbl-resulttable2 shows a summary of a linear model fit.
 
 ```{r}
@@ -190,7 +222,7 @@ knitr::kable(resulttable2)
 # Discussion
 
 ## Summary and Interpretation
-
+We applied Random Forest regression to predict user scores of games based on 11 predictor variables. The model was trained and cross-validated using 10-fold cross-validation. The optimal configuration, with mtry = 99, was selected based on minimizing the Root Mean Square Error (RMSE). The cross-validated RMSE and Mean Absolute Error (MAE) were found to be 0.413 and 0.302, respectively, indicating that the model predicts user scores with an average deviation of approximately 0.413 units and an average absolute error of 0.302 units. These results suggest that the Random Forest approach effectively captures the relationships between predictors and user scores, demonstrating promising performance in predicting game user scores.
 *Summarize what you did, what you found and what it means.*
 
 ## Strengths and Limitations

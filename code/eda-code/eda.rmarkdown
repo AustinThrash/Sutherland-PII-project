@@ -3,7 +3,9 @@ title: "EDA"
 date: "6-20-2024"
 output: html_document
 ---
+
 # Setup
+
 
 ```{r}
 #load needed packages. make sure they are installed.
@@ -14,7 +16,9 @@ library(ggplot2)
 ```
 
 
+
 Load the data.
+
 
 ```{r}
 #Path to data. Note the use of the here() package and not absolute paths
@@ -25,15 +29,17 @@ load("~/GitHub/Sutherland-PII-project/data/raw-data/Data Cleaning/cleaned_data4.
 load("~/GitHub/Sutherland-PII-project/data/raw-data/Data Cleaning/cleaned_games.RData")
 ```
 
-
 ```{r}
 summary(games)
 ```
+
 ```{r}
 str(games)
 ```
 
+
 Here are some visualizations for each predictor variable for userscore
+
 
 ```{r}
 # Boxplot of user scores by game classification
@@ -89,7 +95,9 @@ p6
 
 
 
+
 Here is a glm model with all the predictors including developer
+
 ```{r}
 glm_model <- glm(userscore ~ class + average_playtime + metascore.x + price + owners + median_playtime + developer, 
                  data = games, 
@@ -97,6 +105,7 @@ glm_model <- glm(userscore ~ class + average_playtime + metascore.x + price + ow
 summary(glm_model)
 save(glm_model, file = 'first_model.RData')
 ```
+
 There seem to be a few predictors that are statistically significant:
 metascore.x
 developerBohemia Interactive
@@ -109,12 +118,14 @@ developerTripwire Interactive
 
 
 Below we check the model for non-linearity, homoscedasticity, normally distributed residuals, and identify if there are any influential data points.
+
 ```{r}
 diagnostics<- par(mfrow = c(2, 2))
 plot(glm_model)
 par(mfrow = c(1, 1))
 diagnostics
 ```
+
 
 
 HERE IS WHERE I DID SUBMISSION 4, I AM COMPLETLY RESTRUCTURING THE REPOSITORY TO FIX THE PATHING ISSUES BUT THIS IS WHERE I WILL SHOW MY WORK FOR THE TIME BEING
@@ -124,6 +135,7 @@ HERE IS WHERE I DID SUBMISSION 4, I AM COMPLETLY RESTRUCTURING THE REPOSITORY TO
 
 
 # Split data into training and testing sets and train a linear regression model
+
 ```{r}
 # Load Libraries
 library(caret)
@@ -176,11 +188,13 @@ mae_lm
 
 ```
 
+
 RMSE (0.5475759): Indicates the average deviation of the predicted user scores from the actual user scores is about 0.548.
 MAE (0.4164835): Indicates the average absolute error of the predicted user scores is about 0.416.
 
 
 # Train a Random Forest model
+
 ```{r}
 model_rf <- train(userscore ~ ., data = gamesTrain, method = "rf", trControl = trainControl(method = "cv", number = 10))
 
@@ -195,9 +209,11 @@ mae_rf <- MAE(predictions_rf, gamesTest$userscore)
 print(paste("RMSE: ", rmse_rf))
 print(paste("MAE: ", mae_rf))
 ```
+
 The RMSE and MAE values from the Random Forest model (0.420 and 0.306, respectively) are slightly lower than those from the linear regression model (0.548 and 0.416, respectively). This indicates that the Random Forest model is providing slightly better predictions in this case.
 
 Here I begin my cross validation
+
 
 ```{r}
 # Load Libraries if not already loaded
@@ -245,5 +261,4 @@ print(paste("RMSE (Cross-validated): ", rmse_rf_cv))
 print(paste("MAE (Cross-validated): ", mae_rf_cv))
 
 ```
-
 
