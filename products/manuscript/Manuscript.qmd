@@ -8,8 +8,7 @@ format:
     toc: false
     number-sections: true
     highlight-style: github
-bibliography: ../../assets/dataanalysis-references.bib
-csl: ../../assets/apa.csl
+
 editor: 
   markdown: 
     wrap: sentence
@@ -30,16 +29,11 @@ library(here)
 library(knitr)
 ```
 
-# SUBMISSION 1
 
-In the past couple of years, the gaming market has been thrown for a loop with AAA titles (like Call of Duty) from these multi billion dollar game studios have absolutely flopped in comparison to some of these smaller and simpler games, a good example of one such that most people are aware of is Among Us, which got so popular that it made a small cringe cameo in the second 'Knives Out' movie.
-An example of a flop from a game studio that almost killed the whole studio was the famous launch of Cyberpunk 2077.
-
-Although I am finding trouble with finding data, my hope is to get the most popular AAA games and the most popular Indie games from the past 5 years(A total of 10 games) and do an analysis on how well these games performed in the market.
-This data can hopefully be acquired from launcher stats (like steam or epic games) and news polls on twitter or other social media websites (like Reddit).
-
-hypothesis/question I want answered: What effects a game's user score?
 # Summary/Abstract *Write a summary of your project.*
+
+
+
 
 {{< pagebreak >}}
 
@@ -119,9 +113,7 @@ There seemed to be a clear negative correlation indicating the higher the score,
 knitr::include_graphics(here("results","figures","average-user-scatter.png"))
 ```
 
-Here is one more given that I have 6 and you get the idea, the final manuscript will have them all however I am running short on time atm.
-
-@fig-result3 shows a scatterplot figure
+@fig-result3 shows a scatterplot figure of user scores vs meta scores. There is a clear positive linear relationship between these 2 variables.
 
 ```{r}
 #| label: fig-result3
@@ -129,8 +121,11 @@ Here is one more given that I have 6 and you get the idea, the final manuscript 
 #| echo: FALSE
 knitr::include_graphics(here("results","figures","meta-user-scatter.png"))
 ```
+For more visualizations for other possible predictors, please refer to the eda.qmd file.
 
-@tbl-summarytable shows a summary of the data.
+
+
+Here is a summary table of the predictors.
 
 ```{r}
 load("~/GitHub/Sutherland-PII-project/code/eda-code/first_model.RData")
@@ -148,7 +143,7 @@ kable(coeff_df, digits = 4, caption = "Summary of GLM coefficients")
 
 ## Basic statistical analysis
 
-Below are the statistically significant predictors from the glm model ran on the data.
+Below are the statistically significant predictors from the glm model ran on the data (>.05).
 
 ```{r}
 # Filter for statistically significant results (p-value < 0.05)
@@ -166,35 +161,54 @@ load("~/GitHub/Sutherland-PII-project/code/analysis-code/rf_cv_metrics.RData")
 load("~/GitHub/Sutherland-PII-project/code/analysis-code/lm_metrics.RData")
 ```
 
-Linear Regression Model: RMSE (0.5475759): Indicates the average deviation of the predicted user scores from the actual user scores is about 0.548.
-MAE (0.4164835): Indicates the average absolute error of the predicted user scores is about 0.416.
+For the first model, after splitting the game data into test and training data, I ran 2 different models to see which one has better predicting power.
 
-Random Forest Model: The RMSE and MAE values from the Random Forest model (0.420 and 0.306, respectively) are slightly lower than those from the linear regression model (0.548 and 0.416, respectively).
-This indicates that the Random Forest model is providing slightly better predictions in this case.
-
-RF Cross validation results: Random Forest
-
-36 samples 11 predictors
-
-No pre-processing Resampling: Cross-Validated (10 fold) Summary of sample sizes: 32, 32, 32, 33, 32, 33, ...
-Resampling results across tuning parameters:
-
-mtry RMSE Rsquared MAE\
-2 0.7692740 0.4999631 0.6791293 99 0.5960730 0.7122966 0.4878380 196 0.6296674 0.6880695 0.5207912
-
-RMSE was used to select the optimal model using the smallest value.
-The final value used for the model was mtry = 99.
-\[1\] "RMSE (Cross-validated): 0.412694747961779" \[1\] "MAE (Cross-validated): 0.302266190476191"
-
-Example @tbl-resulttable2 shows a summary of a linear model fit.
+Below in the linear regression model for the training data, after training the model and making predictions, here are the MAE and RMSE statistics for the LM model as well as a plot for observed and predicted models
+```{r}
+print(paste("RMSE: ", rmse_lm ))
+print(paste("MAE: ", mae_lm))
+print(paste("R-squared: ", r_squared_lm))
+```
 
 ```{r}
-#| label: tbl-resulttable2
-#| tbl-cap: "Linear model fit table."
+#| label: fig-result4
+#| fig-cap: "LM model predictions Vs observed"
 #| echo: FALSE
-resulttable2 = readRDS(here("results","tables","resulttable2.rds"))
-knitr::kable(resulttable2)
+knitr::include_graphics(here("results","figures","lm_pred.png"))
 ```
+
+Here is the Random Forest models MAE and RMSE statistic with the observed vs predicted plot.
+```{r}
+print(paste("RMSE: ", rmse_rf))
+print(paste("MAE: ", mae_rf))
+print(paste("R-squared: ", r_squared_rf))
+```
+
+```{r}
+#| label: fig-result5
+#| fig-cap: "RF model predictions Vs observed"
+#| echo: FALSE
+knitr::include_graphics(here("results","figures","rf_pred.png"))
+```
+
+Due to the RF model having a lower RMSE and MAE, while also having a higher r-squared, I proceeded to cross-validate the Random Forest model. Below is the results of my cross validation.
+
+
+
+```{r}
+print(paste("RMSE (Cross-validated): ", rmse_rf_cv))
+print(paste("MAE (Cross-validated): ", mae_rf_cv))
+print(paste("R-squared: ", r_squared_rf_cv))
+```
+```{r}
+#| label: fig-result6
+#| fig-cap: "RF_CV model predictions Vs observed"
+#| echo: FALSE
+knitr::include_graphics(here("results","figures","rf_cv_pred.png"))
+```
+After cross validating the Random Forest model, the r-squared value slightly increases while the MAE and RMSE slightly decreases, so the cross validated model is somewhat better than the RF model.
+
+
 
 {{< pagebreak >}}
 
@@ -204,30 +218,32 @@ knitr::kable(resulttable2)
 
 We applied Random Forest regression to predict user scores of games based on 11 predictor variables.
 The model was trained and cross-validated using 10-fold cross-validation.
-The optimal configuration, with mtry = 99, was selected based on minimizing the Root Mean Square Error (RMSE).
-The cross-validated RMSE and Mean Absolute Error (MAE) were found to be 0.413 and 0.302, respectively, indicating that the model predicts user scores with an average deviation of approximately 0.413 units and an average absolute error of 0.302 units.
+The optimal configuration, with mtry = 82, was selected based on minimizing the Root Mean Square Error (RMSE).
+The cross-validated RMSE and Mean Absolute Error (MAE) were found to be 0.3968 and 0.2896, respectively, indicating that the model predicts user scores with an average deviation of approximately 0.3968 units and an average absolute error of 0.2896 units.
 These results suggest that the Random Forest approach effectively captures the relationships between predictors and user scores, demonstrating promising performance in predicting game user scores.
-*Summarize what you did, what you found and what it means.*
+
 
 ## Strengths and Limitations
 
+One extreme limitation to this project was the fact that I only had the top 25 game classes. Provided I had the time (between classes and work) to match all of the games mentioned with its respective class I feel that the models would fit a lot better. One strength I could always rely on was how detailed the data could get. Depending on how you clean/wrangle it you could use the data for a multitude of projects that involve different hypothesis. Again, i belive having more data to go through in this project could conclude more concrete models for prediction.
 *Discuss what you perceive as strengths and limitations of your analysis.*
 
 ## Conclusions
 
 *What are the main take-home messages?*
-
+Given the r-squared value of the cross validated Random Forest Model, we can conclude that we can roughly conclude the userscore from the 11 predictor variables in the games.csv file. Some of the predictors (like owners and metascore) would need to be predicted if you were to want to predict the userscore of an unreleased game. Overall this project was really fun due to it pertaining to a topic I find truly fascinating being a video game consumer myself. In the future I would probably look for another scoring metrics besides metascore and userscore in order to broaden consumer sentiment.
 *Include citations in your Rmd file using bibtex, the list of references will automatically be placed at the end*
 
-This paper [@leek2015] discusses types of analyses.
-
-These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template.
-
-Note that this cited reference will show up at the end of the document, the reference formatting is determined by the CSL file specified in the YAML header.
-Many more style files for almost any journal [are available](https://www.zotero.org/styles).
-You also specify the location of your bibtex reference file in the YAML.
-You can call your reference file anything you like.
 
 {{< pagebreak >}}
 
 # References
+
+tidy-tuesday exercise - (https://github.com/rfordatascience/tidytuesday/blob/master/data/2019/2019-07-30/video_games.csv)
+kaggle Metacritic games - (https://www.kaggle.com/datasets/destring/metacritic-reviewed-games-since-2000)
+Analyzing Video Games Data in R, Hamza Rafiq - https://towardsdatascience.com/analyzing-video-games-data-in-r-1afad7122aab
+
+
+
+
+
