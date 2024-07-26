@@ -1,0 +1,197 @@
+---
+title: "statistical-analysis"
+format: html
+editor: visual
+---
+
+HERE IS WHERE I DID SUBMISSION 4, I AM COMPLETLY RESTRUCTURING THE REPOSITORY TO FIX THE PATHING ISSUES BUT THIS IS WHERE I WILL SHOW MY WORK FOR THE TIME BEING
+
+
+
+
+
+# Split data into training and testing sets and train a linear regression model
+```{r}
+# Load Libraries and data loading
+library(dplyr)
+library(skimr)
+library(caret)
+library(randomForest)
+library(e1071)
+library(ggplot2)
+
+load("~/GitHub/Sutherland-PII-project/data/raw-data/Data Cleaning/cleaned_games.RData")
+load("~/GitHub/Sutherland-PII-project/code/eda-code/first_model.RData")
+# Check for missing values
+colSums(is.na(games))
+
+# Handle missing values - choose one of the following methods
+# Method 1: Remove rows with missing values
+games <- na.omit(games)
+
+# Method 2: Impute missing values
+preProc <- preProcess(games, method = 'medianImpute')
+games <- predict(preProc, games)
+
+# Convert all character columns to factors
+games[sapply(games, is.character)] <- lapply(games[sapply(games, is.character)], as.factor)
+
+# Check levels of factor variables
+factor_levels <- sapply(games, function(x) if(is.factor(x)) length(levels(x)) else NA)
+print(factor_levels)
+
+# Remove columns with only one level
+single_level_cols <- names(factor_levels)[factor_levels <= 1]
+games <- games[, !names(games) %in% single_level_cols]
+
+# Split data into training and testing sets
+set.seed(123)  # for reproducibility
+trainIndex <- createDataPartition(games$userscore, p = 0.8, list = FALSE, times = 1)
+gamesTrain <- games[trainIndex, ]
+gamesTest <- games[-trainIndex, ]
+```
+
+
+# Train a linear regression model
+```{r}
+model_lm <- train(userscore ~ ., data = gamesTrain, method = "lm")
+
+# Make predictions
+predictions_lm <- predict(model_lm, newdata = gamesTest)
+
+# Evaluate the model
+rmse_lm <- RMSE(predictions_lm, gamesTest$userscore)
+mae_lm <- MAE(predictions_lm, gamesTest$userscore)
+
+save(rmse_lm, mae_lm, file = "lm_metrics.RData")
+print(paste("RMSE: ", rmse_lm ))
+print(paste("MAE: ", mae_lm))
+```
+
+RMSE (0.5475759): Indicates the average deviation of the predicted user scores from the actual user scores is about 0.548.
+MAE (0.4164835): Indicates the average absolute error of the predicted user scores is about 0.416.
+
+```{r}
+library(ggplot2)
+
+# Create a data frame with actual and predicted values
+results <- data.frame(Actual = gamesTest$userscore, Predicted = predictions_lm)
+
+# Plot actual vs predicted values
+p7 <- ggplot(results, aes(x = Actual, y = Predicted)) +
+  geom_point(color = "blue") +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
+  labs(title = "Actual vs Predicted Values", x = "Actual Values", y = "Predicted Values") +
+  theme_minimal()
+figure_file7 = here("results","figures","lm_pred.png")
+ggsave(filename = figure_file7, plot = p7)
+p7
+```
+
+
+# Train a Random Forest model
+```{r}
+model_rf <- train(userscore ~ ., data = gamesTrain, method = "rf", trControl = trainControl(method = "cv", number = 10))
+
+# Make predictions on the test set
+predictions_rf <- predict(model_rf, newdata = gamesTest)
+
+# Evaluate the model
+rmse_rf <- RMSE(predictions_rf, gamesTest$userscore)
+mae_rf <- MAE(predictions_rf, gamesTest$userscore)
+
+
+save(rmse_rf, mae_rf, file = "rf_metrics.RData")
+# Print the evaluation metrics
+print(paste("RMSE: ", rmse_rf))
+print(paste("MAE: ", mae_rf))
+```
+The RMSE and MAE values from the Random Forest model (0.420 and 0.306, respectively) are slightly lower than those from the linear regression model (0.548 and 0.416, respectively). This indicates that the Random Forest model is providing slightly better predictions in this case.
+
+```{r}
+library(ggplot2)
+
+# Create a data frame with actual and predicted values
+results_rf <- data.frame(Actual = gamesTest$userscore, Predicted = predictions_rf)
+
+# Plot actual vs predicted values
+p8 <-ggplot(results_rf, aes(x = Actual, y = Predicted)) +
+  geom_point(color = "blue") +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
+  labs(title = "Actual vs Predicted Values (Random Forest)", x = "Actual Values", y = "Predicted Values") +
+  theme_minimal()
+
+figure_file8 = here("results","figures","rf_pred.png")
+ggsave(filename = figure_file8, plot = p8)
+p8
+```
+
+
+Here I begin my cross validation
+
+```{r}
+# Load Libraries if not already loaded
+library(caret)
+library(randomForest)
+
+
+# Check for missing values and handle them as needed
+colSums(is.na(games))
+
+# Handle missing values 
+games <- na.omit(games)
+
+# Convert all character columns to factors if needed
+games[sapply(games, is.character)] <- lapply(games[sapply(games, is.character)], as.factor)
+
+# Check levels of factor variables if needed
+factor_levels <- sapply(games, function(x) if(is.factor(x)) length(levels(x)) else NA)
+print(factor_levels)
+
+# Remove columns with only one level if needed
+single_level_cols <- names(factor_levels)[factor_levels <= 1]
+games <- games[, !names(games) %in% single_level_cols]
+
+
+# Define cross-validation control using 10-fold cross-validation
+ctrl <- trainControl(method = "cv", number = 10)
+
+# Train the Random Forest model with cross-validation
+set.seed(123)  # for reproducibility
+model_rf_cv <- train(userscore ~ ., data = gamesTrain, method = "rf", trControl = ctrl)
+
+# Print the cross-validation results
+print(model_rf_cv)
+
+# Make predictions on the test set
+predictions_rf_cv <- predict(model_rf_cv, newdata = gamesTest)
+
+# Evaluate the model
+rmse_rf_cv <- RMSE(predictions_rf_cv, gamesTest$userscore)
+mae_rf_cv <- MAE(predictions_rf_cv, gamesTest$userscore)
+
+save(rmse_rf_cv, mae_rf_cv, file = "rf_cv_metrics.RData")
+# Print the evaluation metrics
+print(paste("RMSE (Cross-validated): ", rmse_rf_cv))
+print(paste("MAE (Cross-validated): ", mae_rf_cv))
+
+```
+
+```{r}
+library(ggplot2)
+
+# Create a data frame with actual and predicted values
+results_rf_cv <- data.frame(Actual = gamesTest$userscore, Predicted = predictions_rf_cv)
+
+# Plot actual vs predicted values
+p9 <- ggplot(results_rf_cv, aes(x = Actual, y = Predicted)) +
+  geom_point(color = "blue") +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
+  labs(title = "Actual vs Predicted Values (Cross-Validated Random Forest)", x = "Actual Values", y = "Predicted Values") +
+  theme_minimal()
+
+figure_file9 = here("results","figures","rf_cv_pred.png")
+ggsave(filename = figure_file9, plot = p9)
+p9
+```
+

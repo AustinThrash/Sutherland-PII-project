@@ -1,5 +1,5 @@
 ---
-title: "AAA games are out of touch with what the people want in video games"
+title: "What Can Predict a Game's Userscore?"
 subtitle: ""
 author: Aiden Sutherland
 date: "`r Sys.Date()`"
@@ -47,23 +47,20 @@ hypothesis/question I want answered: What effects a game's user score?
 
 ## General Background Information
 
-*Provide enough background on your topic that others can understand the why and how of your analysis* I have long asked myself what makes a good video game, and if certain video games are worth the prices they are being sold for.
+I have long asked myself what makes a good video game, and if certain video games are worth the prices they are being sold for.
 There have been many instances where I spent a 60 dollars on a heaping pile of garbage, and then spent 10 dollars on some of the best fun I have had at a computer screen.
 Is a game defined by the amount of replay-ability it has or the cost:quality ratio?
 I wanted to find out what made people decide what made a game "good".
 
 ## Description of data and data source
 
-*Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section.* The data I have collected is from a data source from an interesting project
+The data I have collected stems from a few sources, one dataset is from a [tidy-tuesday exercise](https://github.com/rfordatascience/tidytuesday/blob/master/data/2019/2019-07-30/video_games.csv), one dataset from [kaggle](https://www.kaggle.com/datasets/destring/metacritic-reviewed-games-since-2000), and another I personally went through and gathered on the internet (the class-game.csv in the data folder.) This data holds a range of data going from overall metascore to median playtime on a video game while also including the development team and the publisher.
 
 ## Questions/Hypotheses to be addressed
 
-*State the research questions you plan to answer with this analysis.* What effects a game's user score?
+What effects a game's user score and can the user score be predicted?
 
-To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the bibtex file specified in the YAML header above and have the right bibtex key.
-Then you can include like this:
-
-Examples of reproducible research projects can for instance be found in [@mckay2020; @mckay2020a].
+There was a project that was done with similar data that can be found clicking [here](https://towardsdatascience.com/analyzing-video-games-data-in-r-1afad7122aab) done by Hamza Rafiq, however I looked for data that added one more predictor that (given recent trends in the video game market) I was sure would be a predictor.
 
 {{< pagebreak >}}
 
@@ -72,23 +69,12 @@ Examples of reproducible research projects can for instance be found in [@mckay2
 *Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement.* I found 2 different data sets that contained different kinds of sentiment about certain video game titles, 1 by metascore, and one by userscore.
 I then combined them, found the top 25 games for userscore, amount of owners, median playtime, and average playtime then put them in the final dataset.
 Overall there were 56 obs with 13 variables.
+I later added another column with the game class (with 2 factors, one being "AAA" and the other being "indie")
 
-## Schematic of workflow
+## Data Acquisition
 
-Sometimes you might want to show a schematic diagram/figure that was not created with code (if you can do it with code, do it).
-@fig-schematic is an example of some - completely random/unrelated - schematic that was generated with Biorender.
-We store those figures in the `assets` folder.
-
-```{r}
-#| label: fig-schematic
-#| fig-cap: "A figure that is manually generated and shows some overview/schematic. This has nothing to do with the data, it's just a random one from one of our projects I found and placed here."
-#| echo: FALSE
-knitr::include_graphics(here("assets","antigen-recognition.png"))
-```
-
-## Data aquisition
-
-*As applicable, explain where and how you got the data. If you directly import the data from an online source, you can combine this section with the next.*
+When it came to obtaining the data, the project mentioned before done by Hamza Rafiq was very helpful in obtaining the data for this project, however when it came to obtaining data for the game class variable, I had to manually search up the classes for each game after narrowing down the data to the top 25 games for each category.
+The website that was integral in getting this data can be found [here](https://www.moddb.com/search?), just type in any game and all the info you would want will pop up.
 
 ## Data import and cleaning
 
@@ -96,10 +82,13 @@ In the Data folder of this repository, there are 2 data sets that are the ground
 One I imported from a different GitHub repo that can be found in the sources folder (I also downloaded it just in case) and the other is from Kaggle, which I downloaded directly from the site and imported it manually.
 The cleaning process involved me joining the 2 data sets, making sure there were no duplicates of any kind in any variable (the publisher column required me to change anything that contained Warner Brothers to just Warner Brothers).
 From then I broke down the final joined data set to the top 25 publishers and games based on user score and units sold.
+I then joined my class_game.csv to the top 25 games and used that as the final dataset.
 
 ## Statistical analysis
 
 *Explain anything related to your statistical analyses.*
+
+For the statistical analysis, I split the cleaned_games.RData into training and test datasets, then trained and fit a random forest and linear regression model.
 
 {{< pagebreak >}}
 
@@ -107,9 +96,10 @@ From then I broke down the final joined data set to the top 25 publishers and ga
 
 ## Exploratory/Descriptive analysis
 
-*Use a combination of text/tables/figures to explore and describe your data. Show the most important descriptive results here. Additional ones should go in the supplement. Even more can be in the R and Quarto files that are part of your project.* 
+*Use a combination of text/tables/figures to explore and describe your data. Show the most important descriptive results here. Additional ones should go in the supplement. Even more can be in the R and Quarto files that are part of your project.*
 
-@fig-result shows a boxplot figure produced by one of the R scripts.
+@fig-result shows a boxplot comparing game userscore by different game development classes.
+There seems to be a slight trend leaning towards AAA games having a higher userscore.
 
 ```{r}
 #| label: fig-result
@@ -118,94 +108,83 @@ From then I broke down the final joined data set to the top 25 publishers and ga
 knitr::include_graphics(here("results","figures","Class-user-box.png"))
 ```
 
-@fig-result2 shows a scatter plot figure produced by one of the R scripts.
+@fig-result2 shows a scatter plot showing average playtime compared to user score.
+I separated the 2 different game classes by color given that at the beginning of this project I was so sure that this was going to be a predictor.
+There seemed to be a clear negative correlation indicating the higher the score, the lower the average playtime.
 
 ```{r}
 #| label: fig-result2
-#| fig-cap: "Height and weight stratified by gender."
+#| fig-cap: "USer Scores by Average playtime"
 #| echo: FALSE
 knitr::include_graphics(here("results","figures","average-user-scatter.png"))
 ```
 
 Here is one more given that I have 6 and you get the idea, the final manuscript will have them all however I am running short on time atm.
 
-@fig-result3 shows a scatterplot figure produced by one of the R scripts.
+@fig-result3 shows a scatterplot figure
+
 ```{r}
 #| label: fig-result3
-#| fig-cap: "Height and weight stratified by gender."
+#| fig-cap: "MetaScore by UserScore"
 #| echo: FALSE
 knitr::include_graphics(here("results","figures","meta-user-scatter.png"))
 ```
 
 @tbl-summarytable shows a summary of the data.
 
-Note the loading of the data providing a **relative** path using the `../../` notation.
-(Two dots means a folder up).
-You never want to specify an **absolute** path like `C:\ahandel\myproject\results\` because if you share this with someone, it won't work for them since they don't have that path.
-You can also use the `here` R package to create paths.
-See examples of that below.
-I generally recommend the `here` package.
-
 ```{r}
-#| label: tbl-summarytable
-#| tbl-cap: "Data summary table."
-#| echo: FALSE
-resulttable=readRDS("../../results/tables/summarytable.rds")
-knitr::kable(resulttable)
+load("~/GitHub/Sutherland-PII-project/code/eda-code/first_model.RData")
+glm_summary <- summary(glm_model)
+
+# Extract coefficients
+coefficients <- glm_summary$coefficients
+
+# Convert to a data frame for better manipulation
+coeff_df <- as.data.frame(coefficients)
+
+kable(coeff_df, digits = 4, caption = "Summary of GLM coefficients")
+
 ```
 
 ## Basic statistical analysis
 
-*To get some further insight into your data, if reasonable you could compute simple statistics (e.g. simple models with 1 predictor) to look for associations between your outcome(s) and each individual predictor variable. Though note that unless you pre-specified the outcome and main exposure, any "p\<0.05 means statistical significance" interpretation is not valid.*
+Below are the statistically significant predictors from the glm model ran on the data.
+
 ```{r}
-load("~/GitHub/Sutherland-PII-project/code/eda-code/first_model.RData")
-summary(glm_model)
+# Filter for statistically significant results (p-value < 0.05)
+significant_coeff_df <- coeff_df[coeff_df$`Pr(>|t|)` < 0.05, ]
+kable(significant_coeff_df, digits = 4, caption = "Statistically Significant Coefficients from GLM")
 ```
-There seem to be a few predictors that are statistically significant:
-metascore.x
-developerBohemia Interactive
-developer Entertainment
-developerHaemimont Games
-developerSEGA 
-developerTripwire Interactive
-
-
 
 ## Full analysis
 
 *Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here.*
 
-Linear Regression Model:
-RMSE (0.5475759): Indicates the average deviation of the predicted user scores from the actual user scores is about 0.548.
+```{r}
+load("~/GitHub/Sutherland-PII-project/code/analysis-code/rf_metrics.RData")
+load("~/GitHub/Sutherland-PII-project/code/analysis-code/rf_cv_metrics.RData")
+load("~/GitHub/Sutherland-PII-project/code/analysis-code/lm_metrics.RData")
+```
+
+Linear Regression Model: RMSE (0.5475759): Indicates the average deviation of the predicted user scores from the actual user scores is about 0.548.
 MAE (0.4164835): Indicates the average absolute error of the predicted user scores is about 0.416.
 
+Random Forest Model: The RMSE and MAE values from the Random Forest model (0.420 and 0.306, respectively) are slightly lower than those from the linear regression model (0.548 and 0.416, respectively).
+This indicates that the Random Forest model is providing slightly better predictions in this case.
 
-Random Forest Model:
-The RMSE and MAE values from the Random Forest model (0.420 and 0.306, respectively) are slightly lower than those from the linear regression model (0.548 and 0.416, respectively). This indicates that the Random Forest model is providing slightly better predictions in this case.
+RF Cross validation results: Random Forest
 
-RF Cross validation results:
-Random Forest 
+36 samples 11 predictors
 
-36 samples
-11 predictors
-
-No pre-processing
-Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 32, 32, 32, 33, 32, 33, ... 
+No pre-processing Resampling: Cross-Validated (10 fold) Summary of sample sizes: 32, 32, 32, 33, 32, 33, ...
 Resampling results across tuning parameters:
 
-  mtry  RMSE       Rsquared   MAE      
-    2   0.7692740  0.4999631  0.6791293
-   99   0.5960730  0.7122966  0.4878380
-  196   0.6296674  0.6880695  0.5207912
+mtry RMSE Rsquared MAE\
+2 0.7692740 0.4999631 0.6791293 99 0.5960730 0.7122966 0.4878380 196 0.6296674 0.6880695 0.5207912
 
 RMSE was used to select the optimal model using the smallest value.
 The final value used for the model was mtry = 99.
-[1] "RMSE (Cross-validated):  0.412694747961779"
-[1] "MAE (Cross-validated):  0.302266190476191"
-
-
-
+\[1\] "RMSE (Cross-validated): 0.412694747961779" \[1\] "MAE (Cross-validated): 0.302266190476191"
 
 Example @tbl-resulttable2 shows a summary of a linear model fit.
 
@@ -222,7 +201,12 @@ knitr::kable(resulttable2)
 # Discussion
 
 ## Summary and Interpretation
-We applied Random Forest regression to predict user scores of games based on 11 predictor variables. The model was trained and cross-validated using 10-fold cross-validation. The optimal configuration, with mtry = 99, was selected based on minimizing the Root Mean Square Error (RMSE). The cross-validated RMSE and Mean Absolute Error (MAE) were found to be 0.413 and 0.302, respectively, indicating that the model predicts user scores with an average deviation of approximately 0.413 units and an average absolute error of 0.302 units. These results suggest that the Random Forest approach effectively captures the relationships between predictors and user scores, demonstrating promising performance in predicting game user scores.
+
+We applied Random Forest regression to predict user scores of games based on 11 predictor variables.
+The model was trained and cross-validated using 10-fold cross-validation.
+The optimal configuration, with mtry = 99, was selected based on minimizing the Root Mean Square Error (RMSE).
+The cross-validated RMSE and Mean Absolute Error (MAE) were found to be 0.413 and 0.302, respectively, indicating that the model predicts user scores with an average deviation of approximately 0.413 units and an average absolute error of 0.302 units.
+These results suggest that the Random Forest approach effectively captures the relationships between predictors and user scores, demonstrating promising performance in predicting game user scores.
 *Summarize what you did, what you found and what it means.*
 
 ## Strengths and Limitations
